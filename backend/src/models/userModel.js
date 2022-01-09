@@ -1,6 +1,12 @@
 import { db } from '../data/connection_mysql';
 
 export const userModel = {
+  async selectUserDataByEmail(email) {
+    const SQLQuery = 'SELECT id, password, isAdmin FROM users WHERE email = ?;';
+    const response = await db.query(SQLQuery, [email]);
+    return response;
+  },
+
   async getUserByUsernameSQL(username) {
     const getUserByUsernameSQL = 'SELECT * FROM users WHERE username = ?;';
     const getUserByUsernameSQLresult = await db.query(getUserByUsernameSQL, [username]);
@@ -31,5 +37,11 @@ export const userModel = {
     }
     console.log(result)
     return result;
+  },
+
+  async setUserVerifiedByEmail(email) {
+    const makeUserVerifiedSQL = 'UPDATE users SET isVerified=? WHERE email=?;';
+    const verifiedUser = await db.query(makeUserVerifiedSQL, [1, email]);
+    return verifiedUser.results;
   }
 };
